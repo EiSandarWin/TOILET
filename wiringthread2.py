@@ -257,7 +257,7 @@ def start():
                     thAnn5()
                     start_d = datetime.now()
                     status2_toilet = "busy"
-                    wiringpi.digitalWrite(GPIO_LED, 0) # switch on LED. Sets port 18 to 1 (3V3, on)
+                    wiringpi.digitalWrite(GPIO_LED, 1) # switch on LED. Sets port 18 to 1 (3V3, on)
                     user_id = logTable.insert_table(2, current_date, current_time,2, "Girl Busy", duration = duration)
             #        status2("Busy")
     #                print ("\n 女子トイレUse")
@@ -270,7 +270,7 @@ def start():
                     log2count = log2count + 1
                     print ("person count:" + str(log2count))
                     start_waiting()
-                    wiringpi.digitalWrite(GPIO_LED, 0)  # switch on LED. Sets port 18 to 1 (3V3, on)
+                    wiringpi.digitalWrite(GPIO_LED, 1)  # switch on LED. Sets port 18 to 1 (3V3, on)
                     store2_log(str(log2count) + "女子 トイレBusy\n")
                     
                     status2("Busy")
@@ -287,7 +287,7 @@ def start():
                 time_end = datetime.now()
                 duration = time_end - start_d
                 duration = duration.seconds/60.0
-                wiringpi.digitalWrite(GPIO_LED, 1) # switch off LED. Sets port 18 to 0 (0V, off)
+                wiringpi.digitalWrite(GPIO_LED, 0) # switch off LED. Sets port 18 to 0 (0V, off)
                 pygame.mixer.Channel(1).stop()
             #    store2_log("女子 トイレFree\n")
                 user_id = logTable.insert_table(2,current_date, current_time, 2, "Girl Free", duration= duration)

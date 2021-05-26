@@ -22,8 +22,8 @@ pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer =512)
 
 with open('/home/pi/Desktop/simple_flask/config.json') as f:
     config = commentjson.load(f)
-GPIO_LED = config["GPIO_LED1"] #GPIO_LED = 12
-GPIO_SW = config["GPIO_SW1"] #GPIO_SW = 26
+GPIO_LED = config["GPIO_LED1"] #GPIO_LED = 22
+GPIO_SW = config["GPIO_SW1"] #GPIO_SW = 4
 
 announce1 = config["Bannounce1"]
 announce2 = config["Bannounce2"]
@@ -59,9 +59,9 @@ status_blink = False
 
 def blink_led():
     while True: # Run forever
-        wiringpi.digitalWrite(GPIO_LED, 0) # Turn on
+        wiringpi.digitalWrite(GPIO_LED, 1) # Turn on
         sleep(0.5) # Sleep for 1 second
-        wiringpi.digitalWrite(GPIO_LED, 1) # Turn off
+        wiringpi.digitalWrite(GPIO_LED, 0) # Turn off
         sleep(0.5)
         global stop_threads 
         if stop_threads: 
@@ -195,11 +195,12 @@ def stop_waiting():
 
 
 def start():
-    global counter
+    
     durationStop = datetime.now() - timedelta(days=1)
     duration1 = 0
     status_toilet = "free"
     start_d = datetime.now()
+    global counter
     global user_id
     global start
     global end
@@ -236,7 +237,7 @@ def start():
                 status_toilet = "free"
 
         elif (not status_blink) and status_toilet == "busy":
-            if (datetime.now() - start_time).seconds>60:
+            if (datetime.now() - start_time).seconds>120:
                 stop_threads = False
                 print("start blink")    
                 start_blink = threading.Thread(target=blink_led, args=())
@@ -266,7 +267,7 @@ def start():
                     thAnn5()
                     start_d = datetime.now()
                     status_toilet = "busy"
-                    wiringpi.digitalWrite(GPIO_LED, 0) # switch on LED. Sets port 12 to 1 (3V3, on)
+                    wiringpi.digitalWrite(GPIO_LED, 1) # switch on LED. Sets port 12 to 1 (3V3, on)
                     # status("Busy")
                     # print ("\n Boybusy")
                     # store_log(str(logcount) + "男子 トイレ使用開始\n")
@@ -286,7 +287,7 @@ def start():
                     #    status_blink = True
                     start_waiting()
                     print ("person count:" + str(logcount))
-                    wiringpi.digitalWrite(GPIO_LED, 0)  # switch on LED. Sets port 12 to 1 (3V3, on)
+                    wiringpi.digitalWrite(GPIO_LED, 1)  # switch on LED. Sets port 12 to 1 (3V3, on)
                     store_log(str(logcount) + "男子 トイレ使用開始\n")
                     status("Busy")
                     print("\n Boybusy")
@@ -303,7 +304,7 @@ def start():
                 time_end = datetime.now()
                 duration = time_end - start_d
                 duration = duration.seconds/60.0
-                wiringpi.digitalWrite(GPIO_LED, 1) # switch off LED. Sets port 12 to 0 (0V, off)
+                wiringpi.digitalWrite(GPIO_LED, 0) # switch off LED. Sets port 12 to 0 (0V, off)
                 pygame.mixer.Channel(0).stop()
                 # if temp_count<logcount:
                 #     duration = str(duration)

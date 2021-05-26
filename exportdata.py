@@ -13,7 +13,8 @@ cur = conn.cursor()
 cur.execute("SELECT date, time, kinds ,mode  FROM DATA ")
 start_time =time.time()
 #Export dat into csv file
-with open ("output.csv", "wb") as out_csv_file:
+DataSend = "/home/pi/Desktop/simple_flask/output.csv"
+with open (DataSend, "wb") as out_csv_file:
     csv_out = csv.writer(out_csv_file, delimiter = ";")
     csv_out.writerow([d[0] for d in cur.description])
     for result in cur:
@@ -24,7 +25,7 @@ Output_Directory = "/log/BH3020667_demo/"
 #cur.close()
 duration = time.time() - start_time
 print (duration)
-DataSend = "/home/pi/Desktop/simple_flask/output.csv"
+#DataSend = "/home/pi/Desktop/simple_flask/output.csv"
 
 
 ftp = FTP()
